@@ -6,10 +6,12 @@ import com.alibaba.fastjson.JSONObject;
 import com.terwergreen.confluence.xmlrpc.ConfluenceXmlrpcApplication;
 import com.terwergreen.confluence.xmlrpc.service.helper.impl.ConfluenceBlogHelper;
 import com.terwergreen.confluence.xmlrpc.service.xmlrpc.metaweblog.IMetaWeblogApi;
+import com.terwergreen.confluence.xmlrpc.utils.MWebUtils;
 import org.apache.xmlrpc.XmlRpcException;
 import org.apache.xmlrpc.common.XmlRpcNotAuthorizedException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.util.StringUtils;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -95,11 +97,7 @@ public class MetaWeblogImpl implements IMetaWeblogApi {
 
             // 转换为markdown
             String content = postJson.getString("description");
-            StringBuilder sb = new StringBuilder();
-            sb.append("<ac:structured-macro ac:name=\"markdown\" ac:schema-version=\"1\" ac:macro-id=\"529e4807-3a3b-401e-a337-8cccc762b3fe\"><ac:plain-text-body><![CDATA[");
-            sb.append(content);
-            sb.append("]]></ac:plain-text-body></ac:structured-macro>");
-            String parsedMarkdown = sb.toString();
+            String parsedMarkdown = MWebUtils.getParsedMarkdown(content);
 
             List<Object> pParams = new ArrayList<>();
             pParams.add(CONFLUENCE_DEFAULT_SPACE_KEY);
@@ -154,11 +152,8 @@ public class MetaWeblogImpl implements IMetaWeblogApi {
 
             // 转换为markdown
             String content = postJson.getString("description");
-            StringBuilder sb = new StringBuilder();
-            sb.append("<ac:structured-macro ac:name=\"markdown\" ac:schema-version=\"1\" ac:macro-id=\"529e4807-3a3b-401e-a337-8cccc762b3fe\"><ac:plain-text-body><![CDATA[");
-            sb.append(content);
-            sb.append("]]></ac:plain-text-body></ac:structured-macro>");
-            String parsedMarkdown = sb.toString();
+            String parsedMarkdown = MWebUtils.getParsedMarkdown(content);
+            logger.warn("parsedMarkdown=>" + parsedMarkdown);
 
             List<Object> pParams = new ArrayList<>();
             pParams.add(postid);
